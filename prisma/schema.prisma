@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+  output = "../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id            Int             @id
+  name          String          @db.VarChar(255)
+  price         Int?
+  date          DateTime?       @db.Date
+  Product_Store Product_Store[]
+}
+
+model Product_Store {
+  id         Int     @id
+  Product_id Int
+  Store_id   Int
+  Product    Product @relation(fields: [Product_id], references: [id], onUpdate: Restrict, map: "Product_Store_ibfk_1")
+  Store      Store   @relation(fields: [Store_id], references: [id], onUpdate: Restrict, map: "Product_Store_ibfk_2")
+
+  @@index([Product_id], map: "Product_id")
+  @@index([Store_id], map: "Store_id")
+}
+
+model Store {
+  id            Int             @id
+  name          String          @db.VarChar(255)
+  location      String?         @db.VarChar(255)
+  Product_Store Product_Store[]
+}
