@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import {PrismaService} from 'src/prisma.service';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
+
 
 @Injectable()
 export class ProductService {
@@ -15,8 +17,21 @@ export class ProductService {
     return await this.prisma.product.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findproducts(name: string) {
+    const products = await this.prisma.product.findMany({
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+      take: 5,
+    });
+  
+    if (products.length === 0) {
+      throw new NotFoundException(`No products closely resembling the name ${name} found`);
+    }
+  
+    return products;
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
