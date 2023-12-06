@@ -18,8 +18,8 @@ export class ProductController {
   }
 
   @Get(':name')
-  findOne(@Param('name') name: string) {
-    return this.productService.findproducts(name);
+  async findfive(@Param('name') name: string) {
+    return await this.productService.findproducts(name);
   }
 
   @Patch(':id')
