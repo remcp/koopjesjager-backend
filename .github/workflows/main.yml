@@ -30,10 +30,22 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Gather files changed
-        uses: trilom/file-changes-action@https://github.com/remcp/koopjesjager-backend
+      - uses: jitterbit/get-changed-files@v1
+        id: abc
         with:
-          fileOutput: 'json'
-          
-      - name: Show files changed
-        run: cat $HOME/files.json
+          format: space-delimited
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Printing
+        run: |
+          echo "All:"
+          echo "${{ steps.abc.outputs.all }}"
+          echo "Added:"
+          echo "${{ steps.abc.outputs.added }}"
+          echo "Removed:"
+          echo "${{ steps.abc.outputs.removed }}"
+          echo "Renamed:"
+          echo "${{ steps.abc.outputs.renamed }}"
+          echo "Modified:"
+          echo "${{ steps.abc.outputs.modified }}"
+          echo "Added+Modified:"
+          echo "${{ steps.abc.outputs.added_modified }}"
