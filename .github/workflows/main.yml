@@ -31,7 +31,7 @@ jobs:
         run: npm run build
 
       - name: Gather files changed
-        uses: trilom/file-changes-action
+        uses: trilom/file-changes-action@https://github.com/remcp/koopjesjager-backend
         with:
           fileOutput: 'json'
           
